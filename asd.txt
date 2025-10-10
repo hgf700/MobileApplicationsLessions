@@ -1,0 +1,23 @@
+spoko w firebase
+inne funkcje 
+app kurierska lub podobne
+
+np dzialanie offline (local storage / przegladarka)
+
+albo opis obrania po dostarczeniu
+
+lub text to speech
+
+autoryzacja 
+
+swagger ui spoko
+
+cordova spoko
+https://cordova.apache.org/
+browser
+
+backend asp.net mvc i python frontend cordova
+
+opcja praktyczna cordova i android studio
+
+Cyclic hostuje
