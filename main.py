@@ -1,5 +1,6 @@
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
+from typing import Union
 
 app = FastAPI()
 
@@ -18,6 +19,10 @@ users = [
 @app.get("/users")
 def get_users():
     return users
+
+@app.get("/items/{item_id}")
+def read_item(item_id: int, q: Union[str, None] = None):
+    return {"item_id": item_id, "q": q}
 
 # GET – pobierz jednego
 @app.get("/users/{user_id}")
