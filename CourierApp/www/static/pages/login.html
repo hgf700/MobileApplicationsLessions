@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Security-Policy"
+    content="default-src * 'self' 'unsafe-inline' 'unsafe-eval' data: blob:;">
+    <meta name="viewport" content="initial-scale=1, width=device-width">
+    <link rel="stylesheet" href="../css/index.css">
+    <title>login to page</title>
+</head>
+<body>
+    <form>
+        <label for="email">email</label><br>
+        <input type="text" id="email" name="email" autocomplete="username"><br>
+        <label for="password">password</label><br>
+        <input type="password" id="password" name="password" autocomplete="current-password"><br>
+        
+        <button id="loginBTN">login</button>
+    </form>
+    <div id="result"></div>
+
+    <script src="../js/login.js"></script>
+</body>
+</html>
