@@ -4,17 +4,19 @@
     <meta charset="utf-8">
     <meta name="viewport" content="initial-scale=1, width=device-width">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
-    <title>register to page</title>
+    <title>Register</title>
 </head>
 <body>
-    <form>
-        <label for="email">email</label><br>
-        <input type="text" id="email" name="email"><br>
-        <label for="password">password</label><br>
-        <input type="password" id="password" name="password"><br>
+    <form method="POST" action="{{ url_for('register') }}">
+        <label for="email">Email</label><br>
+        <input type="text" id="email" name="email" required><br>
+        <label for="password">Password</label><br>
+        <input type="password" id="password" name="password" required><br>
         
-        <button id="registerBTN">Register</button>
+        <button type="submit" id="registerBTN">Register</button>
     </form>
-    <div id="result"></div>
+    {% if error %}
+        <div style="color:red;">{{ error }}</div>
+    {% endif %}
 </body>
 </html>

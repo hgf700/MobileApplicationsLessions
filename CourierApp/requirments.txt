@@ -1,1 +1,1 @@
-pip install "fastapi[standard]" Flask
+pip install flask psycopg2-binary flask_sqlalchemy python-dotenv 

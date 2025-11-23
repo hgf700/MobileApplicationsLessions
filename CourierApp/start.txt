@@ -1,5 +1,6 @@
-fastapi dev main.py
+flask run
 
-#front i back
+#stare
 uvicorn main:app --host 0.0.0.0 --port 8000 --reload
 cordova run
+fastapi dev main.py
