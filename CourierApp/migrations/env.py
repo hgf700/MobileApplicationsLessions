@@ -1,10 +1,10 @@
 from logging.config import fileConfig
 from models import Base  # Twoje modele
-
+import os
 from sqlalchemy import NullPool, engine_from_config
 from sqlalchemy import pool
 from sqlalchemy import create_engine
-
+from dotenv import load_dotenv
 
 from alembic import context
 
@@ -15,10 +15,15 @@ if config.config_file_name is not None:
 
 target_metadata = Base.metadata
 
-DATABASE_URL = "postgresql+psycopg2://postgres:postgres1@localhost:5432/courier_db"
+load_dotenv() 
 
+db=os.getenv("DATABASE")
+postgres_passw=os.getenv("POSTGRES_PASSWORD")
+postgres_user=os.getenv("POSTGRES_USER")
+
+DATABASE_URL = f"postgresql+psycopg2://{postgres_user}:{postgres_passw}@localhost:5432/{db}"
 def run_migrations_offline() -> None:
-    url = config.get_main_option("sqlalchemy.url")
+    url = config.set_main_option("sqlalchemy.url", DATABASE_URL)
     context.configure(
         url=url,
         target_metadata=target_metadata,

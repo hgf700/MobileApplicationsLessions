@@ -3,10 +3,19 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from models import Base, User
 from werkzeug.security import generate_password_hash, check_password_hash
+from dotenv import load_dotenv
+import os
 
 app = Flask(__name__)
 
-DATABASE_URL = "postgresql+psycopg2://postgres:postgres1@localhost:5432/courier_db"
+# loading variables from .env file
+load_dotenv() 
+
+db=os.getenv("DATABASE")
+postgres_passw=os.getenv("POSTGRES_PASSWORD")
+postgres_user=os.getenv("POSTGRES_USER")
+
+DATABASE_URL = f"postgresql+psycopg2://{postgres_user}:{postgres_passw}@localhost:5432/{db}"
 engine = create_engine(DATABASE_URL)
 Base.metadata.create_all(engine)  # Tworzymy tabele jeśli nie istnieją
 Session = sessionmaker(bind=engine)

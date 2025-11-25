@@ -12,3 +12,4 @@ todo.txt
 venv/
 falat/
 .env
+migrations/
