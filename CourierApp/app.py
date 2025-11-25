@@ -39,8 +39,9 @@ def register():
         new_user = User(email=email, password=hashed_password)
         session.add(new_user)
         session.commit()
+        
         session.close()
-        return redirect(url_for("login"))
+        return redirect(url_for("authorized"))
 
     session.close()
     return render_template("register.html")
@@ -56,7 +57,7 @@ def login():
         user = session.query(User).filter_by(email=email).first()
         if user and check_password_hash(user.password, password):
             session.close()
-            return "Zalogowano pomyślnie"
+            return redirect(url_for("authorized"))
         else:
             session.close()
             return render_template("login.html", error="Nieprawidłowy email lub hasło")
@@ -64,6 +65,9 @@ def login():
     session.close()
     return render_template("login.html")
 
+@app.route("/authorized", methods=["GET"])
+def authorized():
+    return render_template("authorized.html")
 
 if __name__ == "__main__":
     app.run(debug=True)
