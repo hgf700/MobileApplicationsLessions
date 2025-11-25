@@ -13,3 +13,4 @@ venv/
 falat/
 .env
 migrations/
+SqlKomendy.txt

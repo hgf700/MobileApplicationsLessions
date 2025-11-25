@@ -5,6 +5,7 @@ from models import Base, User
 from werkzeug.security import generate_password_hash, check_password_hash
 from dotenv import load_dotenv
 import os
+import flask_login
 
 app = Flask(__name__)
 
@@ -31,16 +32,21 @@ def register():
     if request.method == "POST":
         email = request.form.get("email")
         password = request.form.get("password")
+        
+        usertype = request.form.get("usertype")
 
         if session.query(User).filter_by(email=email).first():
             return render_template("register.html", error="Użytkownik już istnieje")
 
-        hashed_password = generate_password_hash(password)
-        new_user = User(email=email, password=hashed_password)
-        session.add(new_user)
-        session.commit()
+        with Session() as session:
+            if session.query(User).filter_by(email=email).first():
+                return render_template("register.html", error="Użytkownik już istnieje")
+
+            hashed_password = generate_password_hash(password)
+            new_user = User(email=email, password=hashed_password, user_type=usertype)
+            session.add(new_user)
+            session.commit()
         
-        session.close()
         return redirect(url_for("authorized"))
 
     session.close()
