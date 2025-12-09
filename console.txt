@@ -1,0 +1,14 @@
+allow pasting
+
+routing.getPlan().setWaypoints([
+    L.latLng(49.78576734609803, 19.06021669621735),
+    L.latLng(49.80993354439852,19.043881326530208)
+]);
+
+#docelowe
+routing.getPlan().setWaypoints([
+    L.latLng(49.80993354439840,19.043881326530180),
+    L.latLng(49.80993354439852,19.043881326530208)
+]);
+
+shipment.pickup_lat_lng = [49.80993354439, 19.043881326530180];

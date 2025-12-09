@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1, width=device-width">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+        crossorigin=""/>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.css" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
+    <title>show_map</title>
+</head>
+<body>
+<a href="{{ url_for('show_views.logout') }}">logout</a><br>
+<p>map</p>
+<button id="enableNotif">Włącz powiadomienia</button>
+
+<a href="https://www.google.com/maps/dir/{{shipment.pickup_lat}},{{shipment.pickup_lng}}/{{ shipment.delivery_lat}},{{ shipment.delivery_lng}}">GoogleMaps</a><br>
+
+<div id="map"
+    data-pickup-lat="{{ shipment.pickup_lat or 0 }}" 
+    data-pickup-lng="{{ shipment.pickup_lng or 0 }}"
+    data-delivery-lat="{{ shipment.delivery_lat or 0 }}" 
+    data-delivery-lng="{{ shipment.delivery_lng or 0 }}" 
+    style="height: 500px;"></div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+    crossorigin=""></script>
+
+<script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
+
+<script>
+var mapDiv = document.getElementById('map');
+
+let GEOFENCE_RADIUS_METERS = 250; 
+
+const shipmentData = {
+    pickup_lat_lng: [
+        parseFloat(mapDiv.dataset.pickupLat),
+        parseFloat(mapDiv.dataset.pickupLng)
+    ],
+    delivery_lat_lng: [
+        parseFloat(mapDiv.dataset.deliveryLat),
+        parseFloat(mapDiv.dataset.deliveryLng)
+    ]
+};
+
+window.shipment = new Proxy(shipmentData, {
+    set(target, prop, value) {
+        target[prop] = value;
+        console.log(`shipment.${prop} zmienione na ${value}`);
+        
+        // Poprawne rozpakowanie tablicy delivery
+        const [userLat, userLng] = shipmentData.delivery_lat_lng;
+        refreshMap(userLat, userLng); // Używamy właściwych zmiennych
+
+        return true;
+    }
+});
+
+function getPickupLatLng() {
+    return L.latLng(shipmentData.pickup_lat_lng);
+}
+
+function getDeliveryLatLng() {
+    return L.latLng(shipmentData.delivery_lat_lng);
+}
+
+var map = L.map('map').setView(getPickupLatLng(), 13);
+
+L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 }).addTo(map);
+
+window.routing = L.Routing.control({
+    waypoints: [
+        getPickupLatLng(),
+        getDeliveryLatLng()
+    ],
+    createMarker: function(i, waypoint, n){
+        if (i === 0) return L.marker(waypoint.latLng).bindPopup("Pickup location");
+        if (i === 1) return L.marker(waypoint.latLng).bindPopup("Delivery location");
+        return null;
+    }
+}).addTo(map);
+
+function checkGeofence(userLatLng, destinationLatLng, radiusMeters) {
+    var distance = userLatLng.distanceTo(destinationLatLng);
+    if (distance <= radiusMeters) {
+        console.log("W strefie geofence");
+        return true;
+    }
+    return false;
+}
+
+// Aktualizacja trasy
+function updateRoute() {
+    if (!window.routing) return;
+    window.routing.setWaypoints([
+        getPickupLatLng(),
+        getDeliveryLatLng()
+    ]);
+}
+
+// Odświeżanie mapy
+function refreshMap(userLat, userLng) {
+    var userLatLng = userLat != null && userLng != null ? L.latLng(userLat, userLng) : map.getCenter();
+    var deliveryLatLng = getDeliveryLatLng();
+
+    updateRoute();
+
+    var insideGeofence = checkGeofence(userLatLng, deliveryLatLng, GEOFENCE_RADIUS_METERS);
+
+    console.log("Dystans do celu:", userLatLng.distanceTo(deliveryLatLng), "m");
+
+    if (insideGeofence) {
+        alert("Jesteś blisko celu!");
+    }
+}
+
+// Geolokalizacja
+navigator.geolocation.watchPosition(
+    pos => {
+        var userLatLng = L.latLng(pos.coords.latitude, pos.coords.longitude);
+        var deliveryLatLng = getDeliveryLatLng();
+        var insideGeofence = checkGeofence(userLatLng, deliveryLatLng, GEOFENCE_RADIUS_METERS);
+
+        console.log("Dystans do celu:", userLatLng.distanceTo(deliveryLatLng), "m");
+
+        if (insideGeofence) {
+            alert("Jesteś blisko celu!");
+        }
+    },
+    err => console.error(err),
+    { enableHighAccuracy: true }
+);
+</script>
+
+</body>
+</html>

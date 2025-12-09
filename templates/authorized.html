@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1, width=device-width">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
+    <title>authorized</title>
+</head>
+<body>
+    <a href="{{ url_for('show_views.logout') }}">logout</a><br>
+<p>authorised</p>
+
+<a href="{{ url_for('shipments.add_shipments') }}">add_shipments</a><br>
+
+<a href="{{ url_for('show_views.show_all') }}">show_all</a><br>
+
+<a href="{{ url_for('shipments.show_map') }}">show_map</a><br>
+
+<a href="{{ url_for('shipments.follow_selected_delivery') }}">follow_selected_delivery</a><br>
+
+</body>
+</html>

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1, width=device-width">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
+    <title>add_shipments</title>
+</head>
+<body>
+<a href="{{ url_for('show_views.logout') }}">logout</a><br>
+
+<p>add_shipments</p>
+<a href="{{ url_for('show_views.overview') }}">overwiew</a>
+
+<p>pickup</p>
+<p>49.78576734609803</p>
+<p>19.06021669621735</p>
+<p>delivery</p>
+<p>49.80993354439852</p>
+<p>19.043881326530208</p>
+
+<form method="POST" action="{{ url_for('shipments.add_shipments') }}">
+    <label>Email of sender</label><br>
+    <input type="text" name="EmailSender" required><br>
+
+    <label>Email of receiver</label><br>
+    <input type="text" name="EmailReceiver" required><br>
+
+    <label>pickup_lat</label><br>
+    <input type="text" name="pickup_lat" required><br>
+
+    <label>pickup_lng</label><br>
+    <input type="text" name="pickup_lng" required><br>
+
+    <label>delivery_lat</label><br>
+    <input type="text" name="delivery_lat" required><br>
+
+    <label>delivery_lng</label><br>
+    <input type="text" name="delivery_lng" required><br>
+
+    <button type="submit">Add Shipment</button>
+</form>
+
+{% if error %}
+    <div style="color:red;">{{ error }}</div>
+{% endif %}
+
+
+</body>
+</html>
