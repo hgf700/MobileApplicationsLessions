@@ -51,9 +51,8 @@ window.shipment = new Proxy(shipmentData, {
         target[prop] = value;
         console.log(`shipment.${prop} zmienione na ${value}`);
         
-        // Poprawne rozpakowanie tablicy delivery
         const [userLat, userLng] = shipmentData.delivery_lat_lng;
-        refreshMap(userLat, userLng); // Używamy właściwych zmiennych
+        refreshMap(userLat, userLng); 
 
         return true;
     }
@@ -92,7 +91,6 @@ function checkGeofence(userLatLng, destinationLatLng, radiusMeters) {
     return false;
 }
 
-// Aktualizacja trasy
 function updateRoute() {
     if (!window.routing) return;
     window.routing.setWaypoints([
@@ -101,7 +99,6 @@ function updateRoute() {
     ]);
 }
 
-// Odświeżanie mapy
 function refreshMap(userLat, userLng) {
     var userLatLng = userLat != null && userLng != null ? L.latLng(userLat, userLng) : map.getCenter();
     var deliveryLatLng = getDeliveryLatLng();
@@ -117,7 +114,13 @@ function refreshMap(userLat, userLng) {
     }
 }
 
-// Geolokalizacja
+function playShipmentAudio() {
+    const audioUrl = "/static/audio/shipment_audio.mp3";  
+    const audio = new Audio(audioUrl);
+    audio.play().catch(err => console.error("Błąd odtwarzania audio:", err));
+}
+
+
 navigator.geolocation.watchPosition(
     pos => {
         var userLatLng = L.latLng(pos.coords.latitude, pos.coords.longitude);
@@ -128,6 +131,7 @@ navigator.geolocation.watchPosition(
 
         if (insideGeofence) {
             alert("Jesteś blisko celu!");
+            playShipmentAudio()
         }
     },
     err => console.error(err),

@@ -14,7 +14,7 @@ def save_audio():
     shipment_id = int(shipment_id)
 
     audio_folder = Path(r"C:\Users\USER098\Documents\GitHub\MobileApplicationsLessions\static\audio")
-    audio_folder.mkdir(parents=True, exist_ok=True)  # tworzy folder jeśli nie istnieje
+    audio_folder.mkdir(parents=True, exist_ok=True)  
 
     with Session() as session:
         shipment = session.query(Shipment).filter_by(id=shipment_id).first()
@@ -23,13 +23,10 @@ def save_audio():
 
         text_to_read = f"{shipment.message_target}"
 
-        # nazwa pliku
         file_name = f"shipment_audio.mp3"
         file_path = audio_folder / file_name
 
-        # zapis pliku na dysku
         tts = gTTS(text=text_to_read, lang='pl')
         tts.save(str(file_path))
 
-    # zwracamy link do pliku, żeby frontend mógł go odtworzyć
     return jsonify({"audio_url": f"/static/audio/{file_name}"})
