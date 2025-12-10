@@ -111,32 +111,19 @@ function refreshMap(userLat, userLng) {
 
     if (insideGeofence) {
         alert("Jesteś blisko celu!");
+        playShipmentAudio()
     }
 }
 
 function playShipmentAudio() {
-    const audioUrl = "/static/audio/shipment_audio.mp3";  
+    const audioUrl = "static/audio/shipment_audio.mp3";
     const audio = new Audio(audioUrl);
+    console.log("play audio")
+    audio.load();
     audio.play().catch(err => console.error("Błąd odtwarzania audio:", err));
+    
 }
 
-
-navigator.geolocation.watchPosition(
-    pos => {
-        var userLatLng = L.latLng(pos.coords.latitude, pos.coords.longitude);
-        var deliveryLatLng = getDeliveryLatLng();
-        var insideGeofence = checkGeofence(userLatLng, deliveryLatLng, GEOFENCE_RADIUS_METERS);
-
-        console.log("Dystans do celu:", userLatLng.distanceTo(deliveryLatLng), "m");
-
-        if (insideGeofence) {
-            alert("Jesteś blisko celu!");
-            playShipmentAudio()
-        }
-    },
-    err => console.error(err),
-    { enableHighAccuracy: true }
-);
 </script>
 
 </body>
