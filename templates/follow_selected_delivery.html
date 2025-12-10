@@ -12,7 +12,7 @@
 <p>Twoje przesyłki:</p>
 
 {% for s in shipments %}
-    <form action="{{ url_for('shipments.show_map') }}" method="POST">
+    <form action="{{ url_for('shipments.show_map') }}" method="POST" onsubmit="return handleSubmit(this);">
         <input type="hidden" name="shipment_id" value="{{ s.id }}">
 
         <label>sender: {{ s.user_sender }}</label><br>
@@ -21,10 +21,32 @@
         <button type="submit">
             Przesyłka #{{ s.id }} ({{ s.pickup_lat }}, {{ s.pickup_lng }})
         </button>
-
-        <br>
     </form>
 {% endfor %}
+
+<script>
+async function handleSubmit(form) {
+
+    const shipmentId = form.shipment_id.value;
+
+    try {
+        const response = await fetch(`/api/save_audio?shipment_id=${shipmentId}`);
+        if (!response.ok) throw new Error("Błąd generowania audio");
+
+        const data = await response.json();
+        const audioUrl = data.audio_url;
+
+        const audio = new Audio(audioUrl);
+
+        form.submit();
+    } catch (err) {
+        console.error(err);
+        form.submit();
+    }
+
+    return false;
+}
+</script>
 
 </body>
 </html>
