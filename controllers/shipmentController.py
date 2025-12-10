@@ -5,6 +5,7 @@ from .userController import get_current_user
 
 shipments_bp = Blueprint("shipments", __name__)
 
+#nie dziala przez baze
 @shipments_bp.route("/add_shipments", methods=["GET", "POST"])
 def add_shipments():
     
@@ -39,8 +40,23 @@ def add_shipments():
             delivery_lng=float(delivery_lng)
         )
 
-        session.add(shipment)
-        session.commit()
+        def fix_sequence(session):
+            max_id = session.execute("SELECT MAX(id) FROM shipments").scalar() or 0
+            session.execute(f"SELECT setval('shipments_id_seq', {max_id + 1}, false)")
+            session.commit()
+
+        try:
+            session.add(shipment)
+            session.commit()
+        except Exception as e:
+            session.rollback()
+            if "duplicate key value violates unique constraint" in str(e):
+                fix_sequence(session)
+                session.add(shipment)
+                session.commit()
+            else:
+                raise
+            
         session.close()
 
         return redirect(url_for("show_views.overview"))

@@ -9,6 +9,7 @@ user_bp = Blueprint("user", __name__)
 
 SECRET = "tajny_klucz_jwt"
 
+#nie dziala przez baze
 @user_bp.route("/register", methods=["GET", "POST"])
 def register():   
     if request.method == "POST":

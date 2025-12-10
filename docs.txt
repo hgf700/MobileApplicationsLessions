@@ -1,0 +1,22 @@
+
+https://leafletjs.com/plugins.html
+
+api zaawasnowane ustawienia
+https://www.liedman.net/leaflet-routing-machine/api/
+
+lokalizacja aktualna?
+https://www.w3schools.com/html/html5_geolocation.asp
+
+window zmienne przegladarka
+https://www.w3schools.com/jsref/obj_window.asp
+
+leaflet do mapy/openstreetmap
+https://leafletjs.com/reference.html#map-example
+
+geolocation api w3 school navigator long i lat
+
+mozna ciagly monitor pozycji za pom watchPosition
+
+testowac w przegladarce mozna pozycje w debug przegladarki more tools i sensors by emulowac pozycje
+
+install leafleft.offline by dzialala mapa offline

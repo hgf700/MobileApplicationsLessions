@@ -6,7 +6,7 @@ from .database import Base
 
 class Shipment(Base):
     __tablename__ = "shipments"
-    id = Column(Integer, primary_key=True)
+    id = Column(Integer, primary_key=True, autoincrement=True)
 
     user_sender = Column(Integer, ForeignKey("users.id"))
     user_receiver = Column(Integer, ForeignKey("users.id"), nullable=True)
@@ -28,7 +28,7 @@ class Shipment(Base):
 class User(Base):
     __tablename__ = "users"
 
-    id = Column(Integer, primary_key=True)
+    id = Column(Integer, primary_key=True, autoincrement=True)
     email = Column(String, unique=True, nullable=False)
     password = Column(String, nullable=False)
 

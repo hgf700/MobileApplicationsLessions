@@ -13,6 +13,5 @@ venv/
 falat/
 .env
 migrations/
-SqlKomendy.txt
 __pycache__/
 certyficats/*
