@@ -9,8 +9,9 @@
 <body>
 <a href="{{ url_for('show_views.logout') }}">logout</a><br>
 
-<p>add_shipments</p>
-<a href="{{ url_for('show_views.overview') }}">overwiew</a>
+<a href="{{ url_for('show_views.authorized') }}">authorized</a><br>
+
+<p>add_shipments</p><br>
 
 <p>pickup</p>
 <p>49.78576734609803</p>
@@ -19,7 +20,7 @@
 <p>49.80993354439852</p>
 <p>19.043881326530208</p>
 
-<form method="POST" action="{{ url_for('shipments.add_shipments') }}">
+<form method="POST" action="{{ url_for('show_views.authorized') }}">
     <label>Email of sender</label><br>
     <input type="text" name="EmailSender" required><br>
 

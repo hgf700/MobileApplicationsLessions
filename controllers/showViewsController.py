@@ -12,13 +12,6 @@ def index():
 def authorized():
     return render_template("authorized.html")
 
-@show_views_bp.route("/overview")
-def overview():
-    with Session() as session:
-        users = session.query(User).all()
-        shipments = session.query(Shipment).all()
-    return render_template("overview.html", users=users, shipments=shipments)
-
 @show_views_bp.route("/show_all")
 def show_all():
     with Session() as session:

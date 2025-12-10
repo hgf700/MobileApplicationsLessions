@@ -10,8 +10,11 @@ from controllers.showViewsController import show_views_bp
 from middlewear.middlewear import register_middlewear
 from models.database import engine
 import random
+from flask_cors import CORS
 
 app = Flask(__name__)
+
+CORS(app)
 
 Base.metadata.create_all(engine)
 

@@ -13,7 +13,8 @@
 <body>
 <a href="{{ url_for('show_views.logout') }}">logout</a><br>
 <p>map</p>
-<button id="enableNotif">Włącz powiadomienia</button>
+
+<a href="{{ url_for('show_views.authorized') }}">authorized</a><br>
 
 <a href="https://www.google.com/maps/dir/{{shipment.pickup_lat}},{{shipment.pickup_lng}}/{{ shipment.delivery_lat}},{{ shipment.delivery_lng}}">GoogleMaps</a><br>
 
@@ -22,6 +23,7 @@
     data-pickup-lng="{{ shipment.pickup_lng or 0 }}"
     data-delivery-lat="{{ shipment.delivery_lat or 0 }}" 
     data-delivery-lng="{{ shipment.delivery_lng or 0 }}" 
+    data-shipment-id="{{ shipment.id }}"
     style="height: 500px;"></div>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
@@ -35,6 +37,8 @@ var mapDiv = document.getElementById('map');
 
 let GEOFENCE_RADIUS_METERS = 250; 
 
+const shipmentId = mapDiv.dataset.shipmentId;
+
 const shipmentData = {
     pickup_lat_lng: [
         parseFloat(mapDiv.dataset.pickupLat),
@@ -45,6 +49,15 @@ const shipmentData = {
         parseFloat(mapDiv.dataset.deliveryLng)
     ]
 };
+
+const ship = {
+    delivery: [
+        parseFloat(mapDiv.dataset.deliveryLat),
+        parseFloat(mapDiv.dataset.deliveryLng)
+    ]
+};
+
+console.log("shipment.pickup_lat_lng =[", ship.delivery, "];");
 
 window.shipment = new Proxy(shipmentData, {
     set(target, prop, value) {
@@ -112,7 +125,29 @@ function refreshMap(userLat, userLng) {
     if (insideGeofence) {
         alert("Jesteś blisko celu!");
         playShipmentAudio()
+        changeToComplete()
     }
+}
+
+function changeToComplete(){
+    const data = {
+        shipment_id: shipmentId,
+        status: "completed"
+    };
+
+    fetch("/update_shipment_status", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(data)
+    })
+    .then(res => res.json())
+    .then(result => {
+        console.log("Odpowiedź:", result);
+        alert("Status zmieniony!");
+    })
+    .catch(err => console.error(err));
 }
 
 function playShipmentAudio() {
@@ -121,7 +156,6 @@ function playShipmentAudio() {
     console.log("play audio")
     audio.load();
     audio.play().catch(err => console.error("Błąd odtwarzania audio:", err));
-    
 }
 
 </script>

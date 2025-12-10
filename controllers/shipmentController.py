@@ -31,7 +31,19 @@ def add_shipments():
             error = "Nie znaleziono użytkownika!"
             return render_template("add_shipments.html", error=error)
 
+        last_ship = session.query(Shipment).order_by(Shipment.id.desc()).first()
+        last_id = last_ship.id if last_ship else None
+
+
+        
+
+        if last_id is not None:
+            new_id = last_id + 1
+        else:
+            new_id = 1
+
         shipment = Shipment(
+            id=new_id,
             user_sender=sender.id,
             user_receiver=receiver.id,
             pickup_lat=float(pickup_lat),
@@ -84,9 +96,32 @@ def show_map():
 
         if not shipment:
             return "Shipment not found", 404
+        
+        print("shipment.pickup_lat_lng = [{shipment.delivery_lat}, {shipment.delivery_lng}];")
 
     return render_template(
         "show_map.html",
         shipment=shipment
     )
+
+@shipments_bp.route("/update_shipment_status", methods=["POST"])
+def update_shipment_status():
+    data = request.json
+    shipment_id = data.get("shipment_id")
+    new_status = data.get("status")
+
+    if not shipment_id or not new_status:
+        return jsonify({"error": "Brak shipment_id lub status"}), 400
+
+    with Session() as session:
+        shipment = session.query(Shipment).filter(Shipment.id == shipment_id).first()
+        if not shipment:
+            return jsonify({"error": "Nie znaleziono przesyłki"}), 404
+
+        shipment.status = new_status
+        session.commit()  
+
+    return jsonify({"message": "Status updated", "shipment_id": shipment_id, "new_status": new_status})
+
+
 
