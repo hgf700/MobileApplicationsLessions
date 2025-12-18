@@ -1,3 +1,4 @@
 lepiej do midleweara sprawdzanie jwt
 dekorator dla rol python
 pwa i mozna na mobilne
+w js frontend mozna latwo wygenerowac audio co malo zajmie niz z back
