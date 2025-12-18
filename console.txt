@@ -1,3 +1,5 @@
 allow pasting
 
 shipment.pickup_lat_lng = [49.80993354439, 19.043881326530180];
+
+shipment.pickup_lat_lng = [50.0647, 19.945]

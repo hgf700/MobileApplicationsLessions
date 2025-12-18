@@ -1,0 +1,3 @@
+lepiej do midleweara sprawdzanie jwt
+dekorator dla rol python
+pwa i mozna na mobilne
