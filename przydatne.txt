@@ -4,3 +4,5 @@ migracja
 alembic revision --autogenerate -m "Initial migration"
 alembic upgrade head
 
+ssl token
+openssl req -x509 -newkey rsa:2048 -keyout key.pem -out cert.pem -days 365 -nodes

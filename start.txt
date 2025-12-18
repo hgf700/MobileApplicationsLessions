@@ -1,6 +1,2 @@
-flask run --reload
 
-flask run --debug --reload
-
-#https trzeba 
 python app.py
